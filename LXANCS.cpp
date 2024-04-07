@@ -10,7 +10,7 @@ void onBLEStateChanged(BLENotifications::State state)
     {
     case BLENotifications::StateConnected:
         Serial.println("StateConnected - connected to a phone or tablet");
-        // 刷新statusBar
+        
         break;
 
     case BLENotifications::StateDisconnected:
@@ -37,6 +37,8 @@ void onNotificationArrived(const ArduinoNotification *notification, const Notifi
     Serial.println(notifications.getNotificationCategoryDescription(notification->category)); // ie "social media"
     Serial.println(notification->categoryCount);                                              // How may other notifications are there from this app (ie badge number)
     uint8_t type;
+
+    /* Replace below with your Code when notification is coming, here is A DEMO*/
     if (notification->title.equals("QQ"))
     { //! QQ
         type = 1;
@@ -45,27 +47,27 @@ void onNotificationArrived(const ArduinoNotification *notification, const Notifi
     { //! wechat
         type = 2;
     }
-    send_beep_event(BEEP_SHORT_100MS);
+    
     vTaskDelay(200 / portTICK_PERIOD_MS);
-    send_beep_event(BEEP_SHORT_100MS);
+
     if (type == 1)
     {
         uint8_t index = notification->message.indexOf(":");
         String words = notification->message.substring(index+1, notification->message.length()); // 信息
         if (words.length() > 22)
-        { //! 超过长度 取前22加省略号
+        { //! overlength deal
             words = words.substring(0, 22) + "...";
         }
-        ui_message_show(type, notification->message.substring(0, index+1).c_str(), words.c_str());
+        //ui_message_show(type, notification->message.substring(0, index+1).c_str(), words.c_str());
     }
     if (type == 2)
     {
         String words = notification->message;
         if (words.length() > 22)
-        { //! 超过长度 取前22加省略号
+        { //! overlength deal
             words = words.substring(0, 22) + "...";
         }
-        ui_message_show(type, notification->title.c_str(), words.c_str());
+        //ui_message_show(type, notification->title.c_str(), words.c_str());
     }
 }
 
@@ -76,7 +78,8 @@ void onNotificationRemoved(const ArduinoNotification *notification, const Notifi
     Serial.println(notification->title);
     Serial.println(notification->message);
     Serial.println(notification->type);
-    ui_message_clear();
+    /* Replace below with your Code when notification is removed, here is A DEMO*/
+    //ui_message_clear();
 }
 
 void lx_ancs_begin()
